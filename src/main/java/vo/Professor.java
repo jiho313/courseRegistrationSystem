@@ -1,6 +1,6 @@
 package vo;
 
-import java.sql.Date;
+import java.util.Date;
 
 public class Professor {
 	
@@ -13,6 +13,15 @@ public class Professor {
 	private Dept dept;
 	
 	public Professor() {}
+	
+	public Professor(String id) {
+		this.id = id;
+	}
+	
+	public Professor(String id,String name) {
+		this.id = id;
+		this.name = name;
+	}
 	
 	public String getId() {
 		return id;

@@ -1,18 +1,27 @@
+<%@page import="vo.Professor"%>
+<%@page import="dao.ProfessorDao"%>
+<%@page import="vo.Student"%>
+<%@page import="dao.StudentDao"%>
 <%@ page contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%
 	String menu = request.getParameter("menu");
-	String loinId = (String) session.getAttribute("loginId");
-	String loinType = (String) session.getAttribute("loginType");
+	String loginId = (String) session.getAttribute("loginId");
+	String loginType = (String) session.getAttribute("loginType");
 	System.out.println("메뉴 - " + menu);
-	System.out.println("아이디 - " + loinId);
-	System.out.println("타입 - " + loinType);
+	System.out.println("아이디 - " + loginId);
+	System.out.println("타입 - " + loginType);
+	
+	StudentDao studentDao = new StudentDao();
+	ProfessorDao professorDao = new ProfessorDao();
+	Student student = studentDao.getStudentById(loginId);
+	Professor professor = professorDao.getProfessorById(loginId);
 %>
 <nav class="navbar navbar-expand-sm bg-dark navbar-dark mb-3">
 	<div class="container">
     	<ul class="navbar-nav me-auto">
         	<li class="nav-item"><a class="nav-link <%="홈".equals(menu) ? "active" : "" %>"  href="/app4/home.jsp">홈</a></li>
 			<li class="nav-item dropdown">
-          		<a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+          		<a class="nav-link dropdown-toggle <%="학생".equals(menu) ? "active" : "" %>" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             	학생
           		</a>
           		<ul class="dropdown-menu">
@@ -21,7 +30,7 @@
           		</ul>
         	</li>
 			<li class="nav-item dropdown">
-          		<a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+          		<a class="nav-link dropdown-toggle <%="교수".equals(menu) ? "active" : "" %>" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             	교수
           		</a>
           		<ul class="dropdown-menu">
@@ -32,12 +41,8 @@
       	</ul>
       	<ul class="navbar-nav">
  <%
- 	if (loinId == null) {
+ 	if (loginId == null) {
  %>
-         	<li class="nav-item"><a class="nav-link <%="로그인".equals(menu) ? "active" : "" %>" href="/app4/loginform.jsp">로그인</a></li>
-<%
- 	}
-%>
 			<li class="nav-item dropdown">
           		<a class="nav-link dropdown-toggle <%="회원가입".equals(menu) ? "active" : "" %>"  href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             	사용자 등록
@@ -47,11 +52,23 @@
             		<li><a class="dropdown-item" href="/app4/professor/form.jsp">교수</a></li>
           		</ul>
         	</li>
+         	<li class="nav-item"><a class="nav-link <%="로그인".equals(menu) ? "active" : "" %>" href="/app4/loginform.jsp">로그인</a></li>
+<%
+ 	}
+%>
  <%
- 	if (loinId != null) {
+ 	if (loginId != null) {
+ 		if(student != null) {
  %>
+         	<li class="nav-item"><a class="nav-link "><%=student.getName()%>님 환영합니다.</a></li>
          	<li class="nav-item"><a class="nav-link " href="/app4/logout.jsp">로그아웃</a></li>
- <%
+<%
+ 		} else if (professor != null) {
+%>
+ 			<li class="nav-item"><a class="nav-link "><%=professor.getName()%>님 환영합니다.</a></li>
+         	<li class="nav-item"><a class="nav-link " href="/app4/logout.jsp">로그아웃</a></li>
+<%
+ 		}
  	}
  %>        	
       	</ul>

@@ -1,4 +1,35 @@
+<%@page import="java.util.List"%>
+<%@page import="vo.Course"%>
+<%@page import="dao.ProfessorDao"%>
+<%@page import="java.net.URLEncoder"%>
 <%@ page contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
+<%
+	String loginId = (String)session.getAttribute("loginId");
+	String loginType = (String) session.getAttribute("loginType");
+	
+	if (loginId == null){
+		response.sendRedirect("../loginform.jsp?err=req&job=" + URLEncoder.encode("과정 현황 조회", "utf-8"));
+		return;
+	}
+	
+	if (!"PROFESSOR".equals(loginType)){
+		response.sendRedirect("../home.jsp?err=deny&job=" + URLEncoder.encode("과정 현황 조회", "utf-8"));
+		return;
+	}
+	
+	int no = Integer.parseInt(request.getParameter("no"));
+	
+	ProfessorDao professorDao = new ProfessorDao();
+	Course course = professorDao.getCourseDetailByNo(no);
+	List<Course> courseList = professorDao.getStudentsRegisteredInCourseByCourseNo(no);
+	
+	if (!course.getProfessor().getId().equals(loginId)){
+		response.sendRedirect("../home.jsp?err=deny&job=" + URLEncoder.encode("과정 현황 조회", "utf-8"));
+		return;
+	}
+	
+	
+%>
 <!doctype html>
 <html lang="ko">
 <head>
@@ -26,31 +57,31 @@
 				<tbody>
 					<tr>
 						<th class="table-dark" style="width: 15%;">과정이름</th>
-						<td style="width: 35%;">소프트웨어 개론</td>
+						<td style="width: 35%;"><%=course.getName() %></td>
 						<th class="table-dark" style="width: 15%;">번호</th>
-						<td style="width: 35%;">1000</td>
+						<td style="width: 35%;"><%=course.getNo() %></td>
 					</tr>
 					<tr>
 						<th class="table-dark" style="width: 15%;">구분</th>
-						<td style="width: 35%;">교양</td>
+						<td style="width: 35%;"><%=course.getType() %></td>
 						<th class="table-dark" style="width: 15%;">학점</th>
-						<td style="width: 35%;">3학점</td>
+						<td style="width: 35%;"><%=course.getScore() %></td>
 					</tr>
 					<tr>
 						<th class="table-dark" style="width: 15%;">학과</th>
-						<td style="width: 35%;">컴퓨터공학과</td>
+						<td style="width: 35%;"><%=course.getDept().getName() %></td>
 						<th class="table-dark" style="width: 15%;">담당교수</th>
-						<td style="width: 35%;">홍길동</td>
+						<td style="width: 35%;"><%=course.getProfessor().getName() %></td>
 					</tr>
 					<tr>
 						<th class="table-dark" style="width: 15%;">모집정원</th>
-						<td style="width: 35%;">30</td>
+						<td style="width: 35%;"><%=course.getQuota() %></td>
 						<th class="table-dark" style="width: 15%;">신청자수</th>
-						<td style="width: 35%;">5</td>
+						<td style="width: 35%;"><%=course.getReqCnt() %></td>
 					</tr>
 					<tr>
 						<th class="table-dark" style="width: 15%;">설명</th>
-						<td style="width: 85%; height: 100px;" colspan="3">소트트웨어 개론입니다.</td>
+						<td style="width: 85%; height: 100px;" colspan="3"><%=course.getDescription() %></td>
 					</tr>
 				</tbody>
 			</table>
@@ -70,34 +101,33 @@
 					</tr>
 				</thead>
 				<tbody>
+<%
+	if (courseList.isEmpty()) {
+%>
+		   <tr>
+     		<td colspan="7">
+				<div class="alert alert-secondary">
+   				수강 신청 정보가 존재하지 않습니다.
+					</div>
+				</td>
+		</tr>
+<%		
+	}
+%>
+
+<%
+	for (Course registeredCourse : courseList) {
+%>
 					<tr>
-						<td>1</td>
-						<td>hong</td>
-						<td>홍길동</td>
-						<td>컴퓨터공학과</td>
-						<td>1학년</td>
+						<td><%=registeredCourse.getRegistration().getNo() %></td>
+						<td><%=registeredCourse.getStudent().getId() %></td>
+						<td><%=registeredCourse.getStudent().getName() %></td>
+						<td><%=registeredCourse.getDept().getName() %></td>
+						<td><%=registeredCourse.getStudent().getGrade() %></td>
 					</tr>
-					<tr>
-						<td>2</td>
-						<td>hong</td>
-						<td>홍길동</td>
-						<td>컴퓨터공학과</td>
-						<td>1학년</td>
-					</tr>
-					<tr>
-						<td>3</td>
-						<td>hong</td>
-						<td>홍길동</td>
-						<td>컴퓨터공학과</td>
-						<td>1학년</td>
-					</tr>
-					<tr>
-						<td>4</td>
-						<td>hong</td>
-						<td>홍길동</td>
-						<td>컴퓨터공학과</td>
-						<td>1학년</td>
-					</tr>
+<%
+	}
+%>					
 				</tbody>
 			</table>
 		</div>

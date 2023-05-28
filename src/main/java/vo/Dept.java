@@ -10,7 +10,9 @@ public class Dept {
 	public Dept(int no) {
 		this.no = no;
 	}
-	
+	public Dept(String name) {
+		this.name = name;
+	}
 	public int getNo() {
 		return no;
 	}

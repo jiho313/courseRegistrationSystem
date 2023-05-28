@@ -1,4 +1,8 @@
 <%@ page contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
+<%
+	String err = request.getParameter("err");
+	String job = request.getParameter("job");
+%>
 <!doctype html>
 <html lang="ko">
 <head>
@@ -16,6 +20,15 @@
 
 <div class="container">
 	<div class="bg-light p-3">
+<%
+	if ("deny".equals(err)) {
+%>
+		<div class="alert alert-danger">
+			<strong><%=job %></strong>에 대한 요청은 거부되었습니다.
+		</div>
+<%
+	}
+%>
 		<h1 class="mb-5">수강신청 시스템</h1>
 		<p class="mb-1">학생, 교수로 사용자를 등록할 수 있습니다.</p>
 		<p class="mb-1">학생은 과정조회/수강신청/수강신청현황조회/수강취소 서비스를 제공받습니다.</p>

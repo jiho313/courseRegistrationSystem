@@ -9,21 +9,20 @@
 	String name = request.getParameter("name");
 	String position = request.getParameter("position");
 	int deptNo = Integer.parseInt(request.getParameter("deptNo"));
-
-	ProfessorDao professorDao = new ProfessorDao();
-	Professor professor = new Professor();
 	
+	ProfessorDao professorDao = new ProfessorDao();
+
+	if (professorDao.getProfessorById(id) != null){
+		response.sendRedirect("form.jsp?err=dup");
+		return;
+	}
+
+	Professor professor = new Professor();
 	professor.setId(id);
 	professor.setPassword(password);
 	professor.setName(name);
 	professor.setPosition(position);
 	professor.setDept(new Dept(deptNo));
-	
-	
-	if (professorDao.getProfessorById(id) != null){
-		response.sendRedirect("form.jsp?err=dup");
-		return;
-	}
 	
 	professorDao.insetProfessor(professor);
 	

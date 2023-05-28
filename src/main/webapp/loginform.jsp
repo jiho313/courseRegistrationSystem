@@ -1,6 +1,7 @@
 <%@ page contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%
 	String err = request.getParameter("err");
+	String job = request.getParameter("job");
 %>
 <!doctype html>
 <html lang="ko">
@@ -26,15 +27,22 @@
    	<div class="row mb-3">
    		<div class="col-12">
    			<p>아이디, 비밀번호를 입력하고 로그인하세요</p>
-   			<%
+<%
 	if ("fail".equals(err)) {
 %>
 		<div class="alert alert-danger">
 			<strong>로그인 실패</strong> 일치하는 회원정보가 존재하지 않습니다.
 		</div>
 <%
+	} else if ("req".equals(err)) {
+%>
+		<div class="alert alert-danger">
+			<strong>로그인 필요</strong> <%=job %> 서비스는 로그인 후 이용가능합니다.
+		</div>
+<%
 	}
 %>
+
    			<form class="border bg-light p-3" method="post" action="login.jsp">
    				<div class="form-group mb-2 w-75">
    					<div class="form-check form-check-inline">

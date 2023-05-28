@@ -1,4 +1,34 @@
+<%@page import="java.net.URLEncoder"%>
+<%@page import="dto.Pagination"%>
+<%@page import="util.StringUtils"%>
+<%@page import="vo.Course"%>
+<%@page import="java.util.List"%>
+<%@page import="vo.Professor"%>
+<%@page import="dao.ProfessorDao"%>
 <%@ page contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
+<%
+	String loginId = (String)session.getAttribute("loginId");
+	String loginType = (String) session.getAttribute("loginType");
+
+	if (loginId == null) {
+		response.sendRedirect("../loginform.jsp?err=req&job=" + URLEncoder.encode("개설과정조회", "utf-8"));
+		return;
+	}
+	
+	if (!"PROFESSOR".equals(loginType)) {
+		response.sendRedirect("../home.jsp?err=deny&job=" + URLEncoder.encode("개설과정조회", "utf-8"));
+		return;
+	}
+	
+	ProfessorDao professorDao =new ProfessorDao();
+
+	int pageNo = StringUtils.stringToInt(request.getParameter("page"), 1);
+	int totalRows = professorDao.getTotalRows(loginId);
+
+	Pagination pagination = new Pagination(pageNo, totalRows);
+
+	List<Course> courseList = professorDao.getCourses(pagination.getBegin(), pagination.getEnd(), loginId);
+%>
 <!doctype html>
 <html lang="ko">
 <head>
@@ -24,7 +54,13 @@
    	</div>
 	<div class="row mb-3">
 		<div class="col-12">
+<%
+	if (!courseList.isEmpty()){
+%>
 			<p>개설한 과정을 확인하세요.</p>
+<%
+	}
+%>
 			<table class="table">
 				<thead>
 					<tr class="table-dark">
@@ -38,61 +74,63 @@
 					</tr>
 				</thead>
 				<tbody>
-					<tr class="align-middle">
-						<td>100</td>
-						<td>교양</td>
-						<td>웹 애플리케이션 기초</td>
-						<td>컴퓨터공학과</td>
-						<td>30</td>
-						<td>6</td>
-						<td><a href="course-detail.jsp?no=1" class="btn btn-outline-dark btn-xs">상세정보</a></td>
+<%
+    if (courseList.isEmpty()) {
+%>
+				   <tr>
+        	      		<td colspan="7">
+         					<div class="alert alert-secondary">
+                				개설한 과정이 존재하지 않습니다.
+          					</div>
+      					</td>
 					</tr>
+<%
+    }
+%>
 					<tr class="align-middle">
-						<td>100</td>
-						<td>교양</td>
-						<td>웹 애플리케이션 기초</td>
-						<td>컴퓨터공학과</td>
-						<td>30</td>
-						<td>6</td>
-						<td><a href="course-detail.jsp?no=1" class="btn btn-outline-dark btn-xs">상세정보</a></td>
-					</tr>
+<%
+	for (Course course : courseList) {
+%>
 					<tr class="align-middle">
-						<td>100</td>
-						<td>전공</td>
-						<td>웹 애플리케이션 기초</td>
-						<td>컴퓨터공학과</td>
-						<td>30</td>
-						<td>6</td>
-						<td><a href="course-detail.jsp?no=1" class="btn btn-outline-dark btn-xs">상세정보</a></td>
+						<td><%=course.getNo() %></td>
+						<td><%=course.getType() %></td>
+						<td><%=course.getName() %></td>
+						<td><%=course.getDept().getName() %></td>
+						<td><%=course.getQuota() %></td>
+						<td><%=course.getReqCnt() %></td>
+						<td><a href="course-detail.jsp?no=<%=course.getNo() %>" class="btn btn-outline-dark btn-xs">상세정보</a></td>
 					</tr>
-					<tr class="align-middle">
-						<td>100</td>
-						<td>교양</td>
-						<td>웹 애플리케이션 기초</td>
-						<td>컴퓨터공학과</td>
-						<td>30</td>
-						<td>6</td>
-						<td><a href="course-detail.jsp?no=1" class="btn btn-outline-dark btn-xs">상세정보</a></td>
-					</tr>
+<%
+	}
+%>
+
 				</tbody>
 			</table>
 		</div>
 	</div>
+<%
+	if ( totalRows >= 1 && pageNo >= 1 ) {
+%>
 	<div class="row mb-3">
 		<div class="col-12">
 			<nav>
 				<ul class="pagination justify-content-center">
-					<li class="page-item"><a class="page-link disabled" href="course-list.jsp?page=1">이전</a></li>
-					<li class="page-item"><a class="page-link active" href="course-list.jsp?page=1">1</a></li>
-					<li class="page-item"><a class="page-link" href="course-list.jsp?page=2">2</a></li>
-					<li class="page-item"><a class="page-link" href="course-list.jsp?page=3">3</a></li>
-					<li class="page-item"><a class="page-link" href="course-list.jsp?page=4">4</a></li>
-					<li class="page-item"><a class="page-link" href="course-list.jsp?page=5">5</a></li>
-					<li class="page-item"><a class="page-link" href="course-list.jsp?page=2">다음</a></li>
+					<li class="page-item <%=pageNo <= 1 ? "disabled" : "" %>"><a class="page-link" href="course-list.jsp?page=1">이전</a></li>
+<%
+	for (int num = pagination.getBeginPage(); num <= pagination.getEndPage(); num++) {
+%>
+					<li class="page-item"><a class="page-link <%=pageNo == num ? "active" : "" %>" href="course-list.jsp?page=<%=num %>"><%=num %></a></li>
+<%
+	}
+%>
+					<li class="page-item "><a class="page-link <%=pageNo >= pagination.getTotalPages() ? "disabled" : "" %>" href="course-list.jsp?page=<%=pageNo + 1 %>">다음</a></li>
 				</ul>
 			</nav>
 		</div>
 	</div>
+<%
+	}
+%>
 </div>
 </body>
 </html>

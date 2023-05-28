@@ -1,6 +1,6 @@
 package vo;
 
-import java.sql.Date;
+import java.util.Date;
 
 public class Course {
 
@@ -14,7 +14,25 @@ public class Course {
 	private Date updateDate;
 	private Date createDate;
 	private Dept dept;;
-	private Professor prfessor;
+	private Professor professor;
+	private Registration registration;
+	private Student student;
+	
+	public Course () {}
+
+	public Course (int no) {
+		this.no = no;
+	}
+	
+	public Course (String name) {
+		this.name = name;
+	}
+	
+	public Course (int no, String name ) {
+		this.no = no;
+		this.name = name;
+	}
+	
 	public int getNo() {
 		return no;
 	}
@@ -75,12 +93,26 @@ public class Course {
 	public void setDept(Dept dept) {
 		this.dept = dept;
 	}
-	public Professor getPrfessor() {
-		return prfessor;
+	public Professor getProfessor() {
+		return professor;
 	}
-	public void setPrfessor(Professor prfessor) {
-		this.prfessor = prfessor;
+	public void setProfessor(Professor prfessor) {
+		this.professor = prfessor;
 	}
-	
+
+	public Registration getRegistration() {
+		return registration;
+	}
+
+	public void setRegistration(Registration registration) {
+		this.registration = registration;
+	}
+	public Student getStudent() {
+		return student;
+	}
+
+	public void setStudent(Student student) {
+		this.student = student;
+	}
 	
 }

@@ -1,4 +1,26 @@
+<%@page import="java.net.URLEncoder"%>
+<%@page import="vo.Dept"%>
+<%@page import="java.util.List"%>
+<%@page import="dao.DeptDao"%>
 <%@ page contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
+<%
+	String loginId = (String) session.getAttribute("loginId");
+	String loginType = (String) session.getAttribute("loginType");
+	
+	
+	if (loginId == null){
+		response.sendRedirect("../loginform.jsp?err=req&job=" + URLEncoder.encode("과정등록", "utf-8"));
+		return;
+	}
+	
+	if (!"PROFESSOR".equals(loginType)){
+		response.sendRedirect("../home.jsp?err=deny&job=" + URLEncoder.encode("과정등록", "utf-8"));
+		return;
+	}
+	
+	DeptDao deptDao = new DeptDao();
+	List<Dept> deptList = deptDao.getDepts();
+%>
 <!doctype html>
 <html lang="ko">
 <head>
@@ -26,7 +48,7 @@
 				<form class="row g-3" method="post" action="course-insert.jsp">
 	 				<div class="col-md-12">
 						<label class="form-label">과정명</label>
-						<input type="text" class="form-control" id="name">
+						<input type="text" class="form-control" name="name">
 					</div>
 	 				<div class="col-md-6">
 						<label class="form-label">구분</label>
@@ -44,12 +66,13 @@
 					<div class="col-md-6">
 						<label class="form-label">학과</label>
 						<select class="form-select" name="deptNo">
-	   						<option value="100"> 컴퓨터공학과</option>
-	   						<option value="100"> 컴퓨터공학과</option>
-	   						<option value="100"> 컴퓨터공학과</option>
-	   						<option value="100"> 컴퓨터공학과</option>
-	   						<option value="100"> 컴퓨터공학과</option>
-	   						<option value="100"> 컴퓨터공학과</option>
+<%
+	for (Dept dept : deptList) {
+%>
+	   						<option value="<%=dept.getNo() %>"><%=dept.getName() %></option>
+<%
+	}
+%>
 	   					</select>
 					</div>
 	 				<div class="col-md-6">
