@@ -13,10 +13,8 @@ public class Course {
 	private String description;
 	private Date updateDate;
 	private Date createDate;
-	private Dept dept;;
+	private Dept dept;
 	private Professor professor;
-	private Registration registration;
-	private Student student;
 	
 	public Course () {}
 
@@ -98,21 +96,6 @@ public class Course {
 	}
 	public void setProfessor(Professor prfessor) {
 		this.professor = prfessor;
-	}
-
-	public Registration getRegistration() {
-		return registration;
-	}
-
-	public void setRegistration(Registration registration) {
-		this.registration = registration;
-	}
-	public Student getStudent() {
-		return student;
-	}
-
-	public void setStudent(Student student) {
-		this.student = student;
 	}
 	
 }

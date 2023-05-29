@@ -22,7 +22,7 @@
 	}
 	
 	//int rno = Integer.parseInt(request.getParameter("rno"));
-	int rno = StringUtils.stringToInt(request.getParameter("rno"), 1);
+	int rno = StringUtils.stringToInt(request.getParameter("rno"));
 	
 	RegistrationDao registrationDao = new RegistrationDao();
 	CourseDao courseDao = new CourseDao();

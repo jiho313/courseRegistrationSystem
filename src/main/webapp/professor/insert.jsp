@@ -1,3 +1,5 @@
+<%@page import="java.net.URLEncoder"%>
+<%@page import="util.StringUtils"%>
 <%@page import="vo.Dept"%>
 <%@page import="vo.Professor"%>
 <%@page import="dao.ProfessorDao"%>
@@ -8,7 +10,7 @@
 	String password = request.getParameter("password");
 	String name = request.getParameter("name");
 	String position = request.getParameter("position");
-	int deptNo = Integer.parseInt(request.getParameter("deptNo"));
+	int deptNo = StringUtils.stringToInt((request.getParameter("deptNo")));
 	
 	ProfessorDao professorDao = new ProfessorDao();
 
@@ -23,6 +25,11 @@
 	professor.setName(name);
 	professor.setPosition(position);
 	professor.setDept(new Dept(deptNo));
+	
+	if (id == null || name.isBlank()){
+	    response.sendRedirect("../home.jsp?err=deny&job=" + URLEncoder.encode("교육자 가입", "utf-8") );
+	    return;
+	}
 	
 	professorDao.insetProfessor(professor);
 	
