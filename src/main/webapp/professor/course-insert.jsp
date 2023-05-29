@@ -1,3 +1,4 @@
+<%@page import="util.StringUtils"%>
 <%@page import="dao.ProfessorDao"%>
 <%@page import="vo.Professor"%>
 <%@page import="vo.Dept"%>
@@ -21,9 +22,9 @@
 	
 	String name = request.getParameter("name");
 	String type = request.getParameter("type");
-	int deptNo = Integer.parseInt(request.getParameter("deptNo"));
-	int score = Integer.parseInt(request.getParameter("score"));
-	int quota = Integer.parseInt(request.getParameter("quota"));
+	int deptNo = StringUtils.stringToInt(request.getParameter("deptNo"));
+	int score = StringUtils.stringToInt(request.getParameter("score"));
+	int quota = StringUtils.stringToInt(request.getParameter("quota"));
 	String description = request.getParameter("description");
 	
 	Course course = new Course();
@@ -34,6 +35,12 @@
 	course.setDescription(description);
 	course.setDept(new Dept(deptNo));
 	course.setProfessor(new Professor(loginId));
+	
+
+	if (name == null || name.isBlank()){
+    response.sendRedirect("../home.jsp?err=deny&job=" + URLEncoder.encode("과정등록", "utf-8") );
+    return;
+	}
 	
 	ProfessorDao professorDao = new ProfessorDao();
 	professorDao.insertCourse(course);

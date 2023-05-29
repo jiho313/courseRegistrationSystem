@@ -21,20 +21,38 @@ public class ProfessorDao {
 													  course.getProfessor().getId());
 	}
 	
-	public List<Course> getStudentsRegisteredInCourseByCourseNo(int no) {
+//	public List<Course> getStudentsRegisteredInCourseByCourseNo1(int no) {
+//		return DaoHelper.selectList("professorDao.getStudentsRegisteredInCourseByCourseNo", rs -> {
+//			Course course = new Course();
+//			course.setRegistration(new Registration(rs.getInt("reg_no")));
+//			course.setDept(new Dept(rs.getString("dept_name")));
+//			
+//			Student student = new Student();
+//			student.setId(rs.getString("student_id"));
+//			student.setName(rs.getString("student_name"));
+//			student.setGrade(rs.getInt("student_grade"));
+//			
+//			course.setStudent(student);
+//			
+//			return course;
+//		}, no);
+//	}
+	
+	public List<Registration> getStudentsRegisteredInCourseByCourseNo(int no) {
 		return DaoHelper.selectList("professorDao.getStudentsRegisteredInCourseByCourseNo", rs -> {
-			Course course = new Course();
-			course.setRegistration(new Registration(rs.getInt("reg_no")));
-			course.setDept(new Dept(rs.getString("dept_name")));
+			Registration registration = new Registration();
+			registration.setRowNum(rs.getInt("row_number"));
+			registration.setDept(new Dept(rs.getString("dept_name")));
+			registration.setCourse(new Course(rs.getInt("course_no")));
 			
 			Student student = new Student();
 			student.setId(rs.getString("student_id"));
 			student.setName(rs.getString("student_name"));
 			student.setGrade(rs.getInt("student_grade"));
 			
-			course.setStudent(student);
+			registration.setStudent(student);
 			
-			return course;
+			return registration;
 		}, no);
 	}
 	 

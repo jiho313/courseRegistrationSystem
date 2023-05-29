@@ -1,3 +1,5 @@
+<%@page import="java.net.URLEncoder"%>
+<%@page import="util.StringUtils"%>
 <%@page import="vo.Registration"%>
 <%@page import="dao.RegistrationDao"%>
 <%@page import="dao.CourseDao"%>
@@ -7,12 +9,17 @@
 <%
 	String loginId = (String) session.getAttribute("loginId");
 	String loginType = (String) session.getAttribute("loginType");
-	int no = Integer.parseInt(request.getParameter("no"));
+	int no = StringUtils.stringToInt(request.getParameter("no"));
 	
 	StudentDao studentDao = new StudentDao();
 	CourseDao courseDao = new CourseDao();
 	RegistrationDao registrationDao = new RegistrationDao();
 	Course course = courseDao.getCourseDetailByNo(no);
+	
+	if (course == null) {
+		response.sendRedirect("../home.jsp?err=deny&job=" + URLEncoder.encode("과정 상세 보기", "utf-8"));
+		return;
+	}
 	
 	Registration registration = registrationDao.getRegistrationByCourseNoAndStudentId(no, loginId);
 %>

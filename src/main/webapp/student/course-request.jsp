@@ -1,3 +1,4 @@
+<%@page import="util.StringUtils"%>
 <%@page import="dao.CourseDao"%>
 <%@page import="vo.Student"%>
 <%@page import="vo.Course"%>
@@ -9,7 +10,7 @@
 	// 과정 신청을 처리한다.
 	String loginId = (String) session.getAttribute("loginId");
 	String loginType = (String) session.getAttribute("loginType");
-	int no = Integer.parseInt(request.getParameter("no"));
+	int no = StringUtils.stringToInt(request.getParameter("no"));
 		
 	
 	if (loginId == null){
@@ -42,6 +43,10 @@
 	if (course == null) {
 		response.sendRedirect("../home.jsp?err=deny&job=" + URLEncoder.encode("수강신청", "utf-8"));
 		return;
+	}
+	
+	if (course.getQuota() <= course.getReqCnt()){
+		response.sendRedirect("course-list.jsp?err=quota");
 	}
 	
 	Registration registration = new Registration();

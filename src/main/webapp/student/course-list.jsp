@@ -48,6 +48,15 @@
 <%
 	}
 %>
+<%
+	if ("quota".equals(err)) {
+%>
+		<div class="alert alert-danger">
+			<strong>수강 신청 실패</strong> 모집이 마감된 과정입니다.
+		</div>
+<%
+	}
+%>
 
 			<table class="table">
 				<thead>
@@ -93,9 +102,7 @@
 			</table>
 		</div>
 	</div>
-<%
-	if ( totalRows >= 1 && pageNo >= 1 ) {
-%>
+
 	<div class="row mb-3">
 		<div class="col-12">
 			<nav>
@@ -113,9 +120,7 @@
 			</nav>
 		</div>
 	</div>
-<%
-	}
-%>
+
 </div>
 </body>
 </html>

@@ -4,6 +4,7 @@ import java.util.Date;
 
 public class Registration {
 	
+	private int rowNum;
 	private int no;
 	private Course course;
 	private Student student;
@@ -13,6 +14,14 @@ public class Registration {
 	private Date updateDate;
 	private Date createDate;
 	
+	public int getRowNum() {
+		return rowNum;
+	}
+
+	public void setRowNum(int rowNum) {
+		this.rowNum = rowNum;
+	}
+
 	public Registration() {
 	}
 

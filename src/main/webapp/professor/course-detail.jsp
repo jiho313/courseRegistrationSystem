@@ -1,3 +1,5 @@
+<%@page import="vo.Registration"%>
+<%@page import="util.StringUtils"%>
 <%@page import="java.util.List"%>
 <%@page import="vo.Course"%>
 <%@page import="dao.ProfessorDao"%>
@@ -17,11 +19,11 @@
 		return;
 	}
 	
-	int no = Integer.parseInt(request.getParameter("no"));
+	int no = StringUtils.stringToInt(request.getParameter("no"));
 	
 	ProfessorDao professorDao = new ProfessorDao();
 	Course course = professorDao.getCourseDetailByNo(no);
-	List<Course> courseList = professorDao.getStudentsRegisteredInCourseByCourseNo(no);
+	List<Registration> registrationList = professorDao.getStudentsRegisteredInCourseByCourseNo(no);
 	
 	if (course == null) {
 		response.sendRedirect("../home.jsp?err=deny&job=" + URLEncoder.encode("과정 현황 조회", "utf-8"));
@@ -106,7 +108,7 @@
 				</thead>
 				<tbody>
 <%
-	if (courseList.isEmpty()) {
+	if (registrationList.isEmpty()) {
 %>
 		   <tr>
      		<td colspan="7">
@@ -120,10 +122,10 @@
 %>
 
 <%
-	for (Course registeredCourse : courseList) {
+	for (Registration registeredCourse : registrationList) {
 %>
 					<tr>
-						<td><%=registeredCourse.getRegistration().getNo() %></td>
+						<td><%=registeredCourse.getRowNum() %></td>
 						<td><%=registeredCourse.getStudent().getId() %></td>
 						<td><%=registeredCourse.getStudent().getName() %></td>
 						<td><%=registeredCourse.getDept().getName() %></td>

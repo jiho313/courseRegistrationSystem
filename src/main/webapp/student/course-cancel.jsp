@@ -1,3 +1,4 @@
+<%@page import="util.StringUtils"%>
 <%@page import="vo.Course"%>
 <%@page import="dao.CourseDao"%>
 <%@page import="java.net.URLEncoder"%>
@@ -18,12 +19,13 @@
 		response.sendRedirect("../home.jsp?err=deny&job=" + URLEncoder.encode("수강 취소", "utf-8"));
 		return;
 	}
+
+	int rno = StringUtils.stringToInt(request.getParameter("rno"));
 	
-	int rno = Integer.parseInt(request.getParameter("rno"));
 	RegistrationDao registrationDao = new RegistrationDao();
 	CourseDao courseDao = new CourseDao();
 	Registration registration = registrationDao.getRegistrationByRegNo(rno);
-	
+
 	if (registration == null) {
 		response.sendRedirect("../home.jsp?err=deny&job=" + URLEncoder.encode("수강 취소", "utf-8"));
 		return;
@@ -32,14 +34,14 @@
 		response.sendRedirect("course-registration-list.jsp?err=deny");
 		return;
 	}
-	
+
 	registration.setRegStatus("수강취소");
-	
+
 	Course course = courseDao.getCourseDetailByNo(registration.getCourse().getNo());
 	course.setReqCnt(course.getReqCnt() - 1);
-	
+
 	registrationDao.updateRegistration(registration, rno);
 	courseDao.updateCourse(course);
-	
+
 	response.sendRedirect("course-registration-list.jsp");
 %>
