@@ -48,15 +48,7 @@
 <%
 	}
 %>
-<%
-	if ("fail".equals(err)) {
-%>
-		<div class="alert alert-danger">
-			<strong>수강 신청 실패</strong> 이미 신청한 과정이 존재합니다.
-		</div>
-<%
-	}
-%>
+
 			<table class="table">
 				<thead>
 					<tr class="table-dark">

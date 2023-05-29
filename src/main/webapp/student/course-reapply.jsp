@@ -24,6 +24,10 @@
 	CourseDao courseDao = new CourseDao();
 	Registration registration = registrationDao.getRegistrationByRegNo(rno);
 	
+	if (registration == null) {
+		response.sendRedirect("../home.jsp?err=deny&job=" + URLEncoder.encode("재수강", "utf-8"));
+		return;
+	}
 	if (!loginId.equals(registration.getStudent().getId())){
 		response.sendRedirect("course-registration-list.jsp?err=deny");
 		return;

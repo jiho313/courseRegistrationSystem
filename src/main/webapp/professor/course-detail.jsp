@@ -23,8 +23,12 @@
 	Course course = professorDao.getCourseDetailByNo(no);
 	List<Course> courseList = professorDao.getStudentsRegisteredInCourseByCourseNo(no);
 	
-	if (!course.getProfessor().getId().equals(loginId)){
+	if (course == null) {
 		response.sendRedirect("../home.jsp?err=deny&job=" + URLEncoder.encode("과정 현황 조회", "utf-8"));
+		return;
+	}
+	if (!course.getProfessor().getId().equals(loginId)){
+		response.sendRedirect("course-list.jsp?err=deny");
 		return;
 	}
 	

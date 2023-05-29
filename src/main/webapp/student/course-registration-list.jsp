@@ -18,6 +18,12 @@
 		return;
 	}
 	
+	// 흔한 경우는 아니겠지만 혹시 몰라 신청한 과정을 조회하려는 아이디와 현재 로그인된 아이디가 다를 경우의 예외 처리
+	 if (!loginId.equals(loginId)) {
+		    response.sendRedirect("../home.jsp?err=deny&job=" + URLEncoder.encode("개설과정조회", "utf-8"));
+		    return;
+	}
+	
 	RegistrationDao registrationDao = new RegistrationDao();
 	List<Registration> registrationList = registrationDao.getRegistrations(loginId);
 %>
@@ -58,6 +64,12 @@
 %>
 		<div class="alert alert-danger">
 			<strong>수강 취소 실패</strong> 타인의 수강신청 정보는 변경할 수 없습니다.
+		</div>
+<%
+	} else if ("fail".equals(err)) {
+%>
+		<div class="alert alert-danger">
+			<strong>수강 신청 실패</strong> 이미 신청한 과정이 존재합니다.
 		</div>
 <%
 	}

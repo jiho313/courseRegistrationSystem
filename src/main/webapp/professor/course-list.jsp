@@ -9,6 +9,7 @@
 <%
 	String loginId = (String)session.getAttribute("loginId");
 	String loginType = (String) session.getAttribute("loginType");
+	String err = request.getParameter("err");
 
 	if (loginId == null) {
 		response.sendRedirect("../loginform.jsp?err=req&job=" + URLEncoder.encode("개설과정조회", "utf-8"));
@@ -18,6 +19,12 @@
 	if (!"PROFESSOR".equals(loginType)) {
 		response.sendRedirect("../home.jsp?err=deny&job=" + URLEncoder.encode("개설과정조회", "utf-8"));
 		return;
+	}
+	
+	// 흔한 경우는 아니겠지만 혹시 몰라 개설한 과정을 조회하려는 아이디와 현재 로그인된 아이디가 다를 경우의 예외 처리
+	 if (!loginId.equals(loginId)) {
+		    response.sendRedirect("../home.jsp?err=deny&job=" + URLEncoder.encode("개설과정조회", "utf-8"));
+		    return;
 	}
 	
 	ProfessorDao professorDao =new ProfessorDao();
@@ -58,6 +65,15 @@
 	if (!courseList.isEmpty()){
 %>
 			<p>개설한 과정을 확인하세요.</p>
+<%
+	}
+%>
+<%
+	if ("deny".equals(err)) {
+%>
+		<div class="alert alert-danger">
+			<strong>과정 현황 조회 실패</strong> 타인이 개설한 과정은 조회할 수 없습니다.
+		</div>
 <%
 	}
 %>
