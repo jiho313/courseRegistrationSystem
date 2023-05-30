@@ -11,9 +11,9 @@
 	String loginType = (String) session.getAttribute("loginType");
 	int no = StringUtils.stringToInt(request.getParameter("no"));
 	
-	StudentDao studentDao = new StudentDao();
-	CourseDao courseDao = new CourseDao();
-	RegistrationDao registrationDao = new RegistrationDao();
+	StudentDao studentDao = StudentDao.getInstance();
+	CourseDao courseDao = CourseDao.getInstance();
+	RegistrationDao registrationDao = RegistrationDao.getInstance();
 	Course course = courseDao.getCourseDetailByNo(no);
 	
 	if (course == null) {
@@ -84,12 +84,16 @@
 		<div class="col-12 text-end">
 		
 <%
-	if (loginId != null && course.getQuota() > course.getReqCnt() && "STUDENT".equals(loginType)){
-		if(registration == null){
+	boolean isRegistrable = loginId != null && course.getQuota() > course.getReqCnt() && "STUDENT".equals(loginType);
+	boolean isRegistered = registration != null;
+	boolean isReapplicable = isRegistered && "수강취소".equals(registration.getRegStatus());
+
+	if(isRegistrable){
+		if(!isRegistered){
 %>
 			<a href="course-request.jsp?no=<%=no %>" class="btn btn-success btn-sm">수강신청</a>
 <%
-		} else if("수강취소".equals(registration.getRegStatus())) {
+		} else if(isReapplicable) {
 %>
 			<a href="course-reapply.jsp?rno=<%=registration.getNo() %>" class="btn btn-warning btn-sm">재수강신청</a>
 <%

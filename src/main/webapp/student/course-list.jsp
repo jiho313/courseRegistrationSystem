@@ -6,7 +6,7 @@
 <%@page import="dao.StudentDao"%>
 <%@ page contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%
-	StudentDao studentDao = new StudentDao();
+	StudentDao studentDao = StudentDao.getInstance();
 	
 	int pageNo = StringUtils.stringToInt(request.getParameter("page"), 1);
 	int totalRows = studentDao.getTotalRows();

@@ -18,7 +18,7 @@
 		return;
 	}
 	
-	DeptDao deptDao = new DeptDao();
+	DeptDao deptDao = DeptDao.getInstance();
 	List<Dept> deptList = deptDao.getDepts();
 %>
 <!doctype html>

@@ -18,7 +18,7 @@
 		return;
 	}
 	
-	RegistrationDao registrationDao = new RegistrationDao();
+	RegistrationDao registrationDao = RegistrationDao.getInstance();
 	List<Registration> registrationList = registrationDao.getRegistrations(loginId);
 %>
 <!doctype html>

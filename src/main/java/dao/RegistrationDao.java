@@ -11,6 +11,12 @@ import vo.Student;
 
 public class RegistrationDao {
 	
+	private static RegistrationDao instance = new RegistrationDao();
+	private RegistrationDao() {}
+	public static RegistrationDao getInstance() {
+		return instance;
+	}
+	
 	
 	public void updateRegistration(Registration registration, int regNo) {
 		DaoHelper.update("registraionDao.updateRegistration", registration.getRegStatus(), regNo);

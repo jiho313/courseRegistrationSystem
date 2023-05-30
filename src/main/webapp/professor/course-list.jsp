@@ -21,7 +21,7 @@
 		return;
 	}
 	
-	ProfessorDao professorDao =new ProfessorDao();
+	ProfessorDao professorDao = ProfessorDao.getInstance();
 
 	int pageNo = StringUtils.stringToInt(request.getParameter("page"), 1);
 	int totalRows = professorDao.getTotalRows(loginId);

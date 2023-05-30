@@ -12,7 +12,7 @@
 	String position = request.getParameter("position");
 	int deptNo = StringUtils.stringToInt((request.getParameter("deptNo")));
 	
-	ProfessorDao professorDao = new ProfessorDao();
+	ProfessorDao professorDao = ProfessorDao.getInstance();
 
 	if (professorDao.getProfessorById(id) != null){
 		response.sendRedirect("form.jsp?err=dup");

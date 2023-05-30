@@ -3,7 +3,7 @@
 <%@page import="dao.DeptDao"%>
 <%@ page contentType="text/html; charset=utf-8" pageEncoding="utf-8" %>
 <%
-	DeptDao deptDao = new DeptDao();
+	DeptDao deptDao = DeptDao.getInstance();
 	List<Dept> deptList = deptDao.getDepts();
 	String err = (String) request.getParameter("err");
 %>

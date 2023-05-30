@@ -11,8 +11,8 @@
 	System.out.println("아이디 - " + loginId);
 	System.out.println("타입 - " + loginType);
 	
-	StudentDao studentDao = new StudentDao();
-	ProfessorDao professorDao = new ProfessorDao();
+	StudentDao studentDao = StudentDao.getInstance();
+	ProfessorDao professorDao = ProfessorDao.getInstance();
 	Student student = studentDao.getStudentById(loginId);
 	Professor professor = professorDao.getProfessorById(loginId);
 %>
@@ -20,6 +20,9 @@
 	<div class="container">
     	<ul class="navbar-nav me-auto">
         	<li class="nav-item"><a class="nav-link <%="홈".equals(menu) ? "active" : "" %>"  href="/app4/home.jsp">홈</a></li>
+<%
+	if ("STUDENT".equals(loginType)) {
+%>
 			<li class="nav-item dropdown">
           		<a class="nav-link dropdown-toggle <%="학생".equals(menu) ? "active" : "" %>" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             	학생
@@ -29,6 +32,9 @@
             		<li><a class="dropdown-item" href="/app4/student/course-registration-list.jsp">신청현황 조회</a></li>
           		</ul>
         	</li>
+<%
+	} else if ("PROFESSOR".equals(loginType)) {
+%>
 			<li class="nav-item dropdown">
           		<a class="nav-link dropdown-toggle <%="교수".equals(menu) ? "active" : "" %>" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             	교수
@@ -38,6 +44,9 @@
             		<li><a class="dropdown-item" href="/app4/professor/course-form.jsp">과정 등록</a></li>
           		</ul>
         	</li>
+ <%
+	}
+ %>
       	</ul>
       	<ul class="navbar-nav">
  <%

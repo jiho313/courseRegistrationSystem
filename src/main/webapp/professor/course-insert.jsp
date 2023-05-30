@@ -42,7 +42,7 @@
     return;
 	}
 	
-	ProfessorDao professorDao = new ProfessorDao();
+	ProfessorDao professorDao = ProfessorDao.getInstance();
 	professorDao.insertCourse(course);
 	
 	response.sendRedirect("course-list.jsp");

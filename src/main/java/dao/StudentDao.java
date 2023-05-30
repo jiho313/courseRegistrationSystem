@@ -10,6 +10,12 @@ import vo.Student;
 
 public class StudentDao {
 	
+	private static StudentDao instance = new StudentDao();
+	private StudentDao() {}
+	public static StudentDao getInstance() {
+		return instance;
+	}
+	
 	
 	public List<Course> getCourses (int begin, int end) {
 		return DaoHelper.selectList("studentDao.getCourses", rs -> {

@@ -13,7 +13,7 @@
 	int deptNo = StringUtils.stringToInt((request.getParameter("deptNo")));
 
 	Student student = new Student();
-	StudentDao studentDao = new StudentDao();
+	StudentDao studentDao = StudentDao.getInstance();
 	
 	
 	if (studentDao.getStudentById(id) != null){

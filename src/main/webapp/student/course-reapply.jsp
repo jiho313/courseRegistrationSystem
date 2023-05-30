@@ -24,22 +24,32 @@
 	//int rno = Integer.parseInt(request.getParameter("rno"));
 	int rno = StringUtils.stringToInt(request.getParameter("rno"));
 	
-	RegistrationDao registrationDao = new RegistrationDao();
-	CourseDao courseDao = new CourseDao();
-	Registration registration = registrationDao.getRegistrationByRegNo(rno);
+	RegistrationDao registrationDao = RegistrationDao.getInstance();
+	CourseDao courseDao = CourseDao.getInstance();
 	
+	Registration registration = registrationDao.getRegistrationByRegNo(rno);
 	if (registration == null) {
 		response.sendRedirect("../home.jsp?err=deny&job=" + URLEncoder.encode("재수강", "utf-8"));
 		return;
 	}
+
+	Course course = courseDao.getCourseDetailByNo(registration.getCourse().getNo());
+	
 	if (!loginId.equals(registration.getStudent().getId())){
 		response.sendRedirect("course-registration-list.jsp?err=deny");
 		return;
 	}
+	if (course == null) {
+		response.sendRedirect("../home.jsp?err=deny&job=" + URLEncoder.encode("수강신청", "utf-8"));
+		return;
+	}
+	
+	if (course.getQuota() <= course.getReqCnt()){
+		response.sendRedirect("course-list.jsp?err=quota");
+		return;
+	}
 	
 	registration.setRegStatus("신청완료");
-	
-	Course course = courseDao.getCourseDetailByNo(registration.getCourse().getNo());
 	course.setReqCnt(course.getReqCnt() + 1);
 	
 	registrationDao.updateRegistration(registration, rno);

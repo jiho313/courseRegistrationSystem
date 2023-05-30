@@ -21,7 +21,7 @@
 	
 	int no = StringUtils.stringToInt(request.getParameter("no"));
 	
-	ProfessorDao professorDao = new ProfessorDao();
+	ProfessorDao professorDao = ProfessorDao.getInstance();
 	Course course = professorDao.getCourseDetailByNo(no);
 	List<Registration> registrationList = professorDao.getStudentsRegisteredInCourseByCourseNo(no);
 	

@@ -22,8 +22,8 @@
 
 	int rno = StringUtils.stringToInt(request.getParameter("rno"));
 	
-	RegistrationDao registrationDao = new RegistrationDao();
-	CourseDao courseDao = new CourseDao();
+	RegistrationDao registrationDao = RegistrationDao.getInstance();
+	CourseDao courseDao = CourseDao.getInstance();
 	Registration registration = registrationDao.getRegistrationByRegNo(rno);
 
 	if (registration == null) {

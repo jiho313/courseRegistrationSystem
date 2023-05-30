@@ -7,6 +7,12 @@ import vo.Dept;
 
 public class DeptDao {
 	
+	private static DeptDao instance = new DeptDao();
+	private DeptDao() {}
+	public static DeptDao getInstance() {
+		return instance;
+	}
+	
 	public List<Dept> getDepts () {
 		return DaoHelper.selectList("deptDao.getDepts", rs -> {
 			Dept dept = new Dept();
